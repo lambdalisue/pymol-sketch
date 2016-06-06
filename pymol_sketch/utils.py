@@ -19,3 +19,9 @@ def str_to_color(c):
     if c in color_map:
         return cmd.get_color_tuple(color_map[c])
     return str_to_vector(c)
+
+
+def int_to_state(s):
+    if s == -1:
+        return cmd.get_state()
+    return s

@@ -4,15 +4,15 @@ from pymol_sketch import shape
 from pymol_sketch import geometry
 
 
-def sketch_pcoc(selection, state=None, name=None,
-                prefix='', suffix='_coc', **kwargs):
+def sketch_pseudo_coc(selection, state=None, name=None,
+                      prefix='', suffix='_coc', **kwargs):
     """Create a pseudo atom which indicate the center of coordinate of the
     selection
 
     USAGE
 
-        sketch_pcoc selection, state=state, name=name,
-                    prefix=prefix, suffix=suffix
+        sketch_pseudo_coc selection, state=state, name=name,
+                          prefix=prefix, suffix=suffix
 
     ARGUMENTS
 
@@ -48,15 +48,15 @@ def sketch_pcoc(selection, state=None, name=None,
             cmd.pseudoatom(name, pos=com, state=state, **kwargs)
 
 
-def sketch_pcom(selection, state=None, name=None,
-                prefix='', suffix='_coc', **kwargs):
+def sketch_pseudo_com(selection, state=None, name=None,
+                      prefix='', suffix='_coc', **kwargs):
     """Create a pseudo atom which indicate the center of mass of the
     selection
 
     USAGE
 
-        sketch_pcom selection, state=state, name=name,
-                    prefix=prefix, suffix=suffix
+        sketch_pseudo_com selection, state=state, name=name,
+                          prefix=prefix, suffix=suffix
 
     ARGUMENTS
 
@@ -92,15 +92,15 @@ def sketch_pcom(selection, state=None, name=None,
             cmd.pseudoatom(name, pos=com, state=state, **kwargs)
 
 
-def sketch_scoc(selection, state=-1, name=None, prefix='coc',
-                radius=1.0, color='gray', alpha=0.5, verbose=True):
+def sketch_coc(selection='(all)', state=-1, name=None, prefix='coc',
+               radius=1.0, color='gray', alpha=0.5, verbose=True):
     """
     Draw a sphere which indicate a center of coordinate of the selection
 
     USAGE
 
-        sketch_scoc selection, state=state, name=name, prefix=prefix,
-                    readius=radius, color=color, alpha=alpha
+        sketch_coc selection, state=state, name=name, prefix=prefix,
+                   readius=radius, color=color, alpha=alpha
 
     ARGUMENTS
 
@@ -116,9 +116,9 @@ def sketch_scoc(selection, state=-1, name=None, prefix='coc',
 
     EXAMPLE
 
-        sketch_scoc resn PHE, state=10, radius=3.2
-        sketch_scoc resn PHE, state=10, color='red'
-        sketch_scoc resn PHE, state=10, color=(0, 0.2, 0)
+        sketch_coc resn PHE, state=10, radius=3.2
+        sketch_coc resn PHE, state=10, color='red'
+        sketch_coc resn PHE, state=10, color=(0, 0.2, 0)
 
     """
     coc = geometry.find_center_of_coordinates(selection, state=int(state))
@@ -131,15 +131,15 @@ def sketch_scoc(selection, state=-1, name=None, prefix='coc',
         ))
 
 
-def sketch_scom(selection, state=-1, name=None, prefix='com',
-                radius=1.0, color='gray', alpha=0.5, verbose=True):
+def sketch_com(selection='(all)', state=-1, name=None, prefix='com',
+               radius=1.0, color='gray', alpha=0.5, verbose=True):
     """
     Draw a sphere which indicate a center of mass of the selection
 
     USAGE
 
-        sketch_scom selection, state=state, name=name, prefix=prefix,
-                    readius=radius, color=color, alpha=alpha
+        sketch_com selection, state=state, name=name, prefix=prefix,
+                   readius=radius, color=color, alpha=alpha
 
     ARGUMENTS
 
@@ -155,9 +155,9 @@ def sketch_scom(selection, state=-1, name=None, prefix='com',
 
     EXAMPLE
 
-        sketch_scom resn PHE, state=10, radius=3.2
-        sketch_scom resn PHE, state=10, color='red'
-        sketch_scom resn PHE, state=10, color=(0, 0.2, 0)
+        sketch_com resn PHE, state=10, radius=3.2
+        sketch_com resn PHE, state=10, color='red'
+        sketch_com resn PHE, state=10, color=(0, 0.2, 0)
 
     """
     com = geometry.find_center_of_mass(selection, state=int(state))
@@ -170,7 +170,7 @@ def sketch_scom(selection, state=-1, name=None, prefix='com',
         ))
 
 
-def sketch_bbox(selection, state=-1, name=None, prefix='bbox',
+def sketch_bbox(selection='(all)', state=-1, name=None, prefix='bbox',
                 padding=0, linewidth=2.0,
                 color='gray', alpha=0.5, verbose=True):
     """
@@ -221,4 +221,46 @@ def sketch_bbox(selection, state=-1, name=None, prefix='bbox',
             dimension[3],
             dimension[4],
             dimension[5],
+        ))
+
+
+def sketch_radgyr(selection='(all)', state=-1, mass=True, name=None,
+                  prefix='radgyr', color='gray', alpha=0.5, verbose=True):
+    """
+    Draw a sphere which indicate a radius of gyration of the selection
+
+    USAGE
+
+        sketch_scom selection, state=state, name=name, prefix=prefix,
+                    readius=radius, color=color, alpha=alpha
+
+    ARGUMENTS
+
+        selection   a selection-expression
+        state       a state-index if positive number or 0 to all, -1 to current
+        mass        return mass-weighted radius of gyration (Default: True)
+        name        a name of the compiled graphic object, it will
+                    automatically specified if None is specified (Default)
+        prefix      a prefix of the compiled graphic object. it will used
+                    only when name is not specified
+        color       a color of the sphere
+        alpha       a alpha-value of the sphere
+
+    EXAMPLE
+
+        sketch_radgyr resn PHE, state=10
+        sketch_radgyr resn PHE, state=10, color='red'
+        sketch_radgyr resn PHE, state=10, color=(0, 0.2, 0)
+
+    """
+    com = geometry.find_center_of_mass(selection, state=int(state))
+    radius = geometry.find_radius_of_gyration(
+        selection, state=int(state), mass=bool(mass),
+    )
+    sphere = shape.Sphere(com, float(radius), utils.str_to_color(color))
+    sphere.create(name, prefix, float(alpha))
+
+    if verbose:
+        print('Radius of gyration: %.3f at (%.3f, %.3f, %.3f)' % (
+            radius, com[0], com[1], com[2],
         ))
