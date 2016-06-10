@@ -2,7 +2,7 @@ import re
 from pymol import cmd
 
 
-NUMBER_PATTERN = r'(?:\d+(?:\.\d+)?|\.\d+)'
+NUMBER_PATTERN = r'[-+]?(?:\d+(?:\.\d+)?|\.\d+)'
 
 
 def str_to_vector(s):
