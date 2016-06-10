@@ -12,14 +12,18 @@ class CGO(object):
     def primitive(self):
         return self._primitive
 
-    def create(self, name=None, prefix='cgo', alpha=1.0, state=0):
+    def create(self, name=None, prefix='cgo', alpha=1.0, state=0,
+               overwrite=None):
         """
         Create a compiled graphic object with given name
         """
         if name is None:
             name = cmd.get_unused_name(prefix)
+        if overwrite is None and state == 0:
+            overwrite = True
         # remove a object which has a same name
-        cmd.delete(name)
+        if overwrite:
+            cmd.delete(name)
         # store origianl value of auto_zoom
         original_auto_zoom = cmd.get('auto_zoom')
         # disable auto_zoom

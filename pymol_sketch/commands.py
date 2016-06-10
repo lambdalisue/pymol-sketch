@@ -123,7 +123,7 @@ def sketch_coc(selection='(all)', state=-1, name=None, prefix='coc',
     """
     coc = geometry.find_center_of_coordinates(selection, state=int(state))
     sphere = shape.Sphere(coc, float(radius), utils.str_to_color(color))
-    sphere.create(name, prefix, float(alpha))
+    sphere.create(name, prefix, float(alpha), state=int(state))
 
     if verbose:
         print('Center of coordinate: %.3f, %.3f, %.3f' % (
@@ -162,7 +162,7 @@ def sketch_com(selection='(all)', state=-1, name=None, prefix='com',
     """
     com = geometry.find_center_of_mass(selection, state=int(state))
     sphere = shape.Sphere(com, float(radius), utils.str_to_color(color))
-    sphere.create(name, prefix, float(alpha))
+    sphere.create(name, prefix, float(alpha), state=int(state))
 
     if verbose:
         print('Center of mass: %.3f, %.3f, %.3f' % (
@@ -211,7 +211,7 @@ def sketch_bbox(selection='(all)', state=-1, name=None, prefix='bbox',
         color=utils.str_to_color(color),
         linewidth=float(linewidth),
     )
-    box.create(name, prefix, float(alpha))
+    box.create(name, prefix, float(alpha), state=int(state))
 
     if verbose:
         dimension = geometry.find_bounding_box(
@@ -258,7 +258,7 @@ def sketch_radgyr(selection='(all)', state=-1, mass=True, name=None,
         selection, state=int(state), mass=bool(mass),
     )
     sphere = shape.Sphere(com, float(radius), utils.str_to_color(color))
-    sphere.create(name, prefix, float(alpha))
+    sphere.create(name, prefix, float(alpha), state=int(state))
 
     if verbose:
         print('Radius of gyration: %.3f at (%.3f, %.3f, %.3f)' % (
@@ -266,7 +266,7 @@ def sketch_radgyr(selection='(all)', state=-1, mass=True, name=None,
         ))
 
 
-def sketch_sphere(coordinate=(0, 0, 0), name=None, prefix='sphere',
+def sketch_sphere(coordinate=(0, 0, 0), state=-1, name=None, prefix='sphere',
                   radius=1.0, color='gray', alpha=0.5, verbose=True):
     """
     Draw a sphere on a specified coordinate
@@ -279,6 +279,7 @@ def sketch_sphere(coordinate=(0, 0, 0), name=None, prefix='sphere',
     ARGUMENTS
 
         coordinate  a coordinate vector (x, y, z)
+        state       a state-index if positive number or 0 to all, -1 to current
         name        a name of the compiled graphic object, it will
                     automatically specified if None is specified (Default)
         prefix      a prefix of the compiled graphic object. it will used
@@ -295,4 +296,4 @@ def sketch_sphere(coordinate=(0, 0, 0), name=None, prefix='sphere',
     """
     coordinate = utils.str_to_vector(coordinate)
     sphere = shape.Sphere(coordinate, float(radius), utils.str_to_color(color))
-    sphere.create(name, prefix, float(alpha))
+    sphere.create(name, prefix, float(alpha), state=int(state))
