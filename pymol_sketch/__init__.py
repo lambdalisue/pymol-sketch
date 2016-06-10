@@ -9,3 +9,4 @@ def register_commands():
     cmd.extend('sketch_com', commands.sketch_com)
     cmd.extend('sketch_bbox', commands.sketch_bbox)
     cmd.extend('sketch_radgyr', commands.sketch_radgyr)
+    cmd.extend('sketch_sphere', commands.sketch_sphere)

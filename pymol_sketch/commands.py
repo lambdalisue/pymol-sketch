@@ -264,3 +264,35 @@ def sketch_radgyr(selection='(all)', state=-1, mass=True, name=None,
         print('Radius of gyration: %.3f at (%.3f, %.3f, %.3f)' % (
             radius, com[0], com[1], com[2],
         ))
+
+
+def sketch_sphere(coordinate=(0, 0, 0), name=None, prefix='sphere',
+                  radius=1.0, color='gray', alpha=0.5, verbose=True):
+    """
+    Draw a sphere on a specified coordinate
+
+    USAGE
+
+        sketch_sphere coordinate, name=name, prefix=prefix,
+                      readius=radius, color=color, alpha=alpha
+
+    ARGUMENTS
+
+        coordinate  a coordinate vector (x, y, z)
+        name        a name of the compiled graphic object, it will
+                    automatically specified if None is specified (Default)
+        prefix      a prefix of the compiled graphic object. it will used
+                    only when name is not specified
+        radius      a raidus of the sphere in float
+        color       a color of the sphere
+        alpha       a alpha-value of the sphere
+
+    EXAMPLE
+
+        sketch_sphere (0, 0, 0), radius=3.2
+        sketch_sphere [0, 0, 0], color='red'
+
+    """
+    coordinate = utils.str_to_vector(coordinate)
+    sphere = shape.Sphere(coordinate, float(radius), utils.str_to_color(color))
+    sphere.create(name, prefix, float(alpha))
